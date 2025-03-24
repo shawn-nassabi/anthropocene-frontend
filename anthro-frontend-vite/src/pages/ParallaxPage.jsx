@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import PageTransition from "../components/PageTransition";
 
 import image1 from "../assets/img1.jpg";
 import image2 from "../assets/img2.jpg";
@@ -84,7 +85,7 @@ function ParallaxPage() {
         },
       });
 
-      // Timeline animation sequence
+      // Timeline animation sequence for centered scaling
       tl.fromTo(
         image,
         {
@@ -116,73 +117,78 @@ function ParallaxPage() {
   };
 
   return (
-    <div ref={containerRef} className="relative w-full bg-black">
-      {/* Background Frame */}
-      <div className="fixed inset-0 w-full h-full z-0 opacity-70">
-        <img
-          ref={frameImageRef}
-          src={getCurrentFramePath()}
-          alt="Mountain background"
-          className="w-full h-full object-cover"
-        />
+    <PageTransition>
+      <div ref={containerRef} className="relative w-full bg-black">
+        {/* Background Frame */}
+        <div className="fixed inset-0 w-full h-full z-0">
+          <img
+            ref={frameImageRef}
+            src={getCurrentFramePath()}
+            alt="Mountain background"
+            className="w-full h-full object-cover"
+            style={{ transform: "none" }} // Ensure no transform is applied
+          />
+        </div>
+
+        {/* Add overlay to make images stand out more against background */}
+        <div className="fixed inset-0 w-full h-full z-10 bg-black opacity-20"></div>
+
+        {/* Content sections with z-index to appear above background */}
+        <div className="relative z-20">
+          <section className="h-screen w-full flex items-center justify-center">
+            <div className="block text-center">
+              <h1 className="text-white text-2xl font-montserrat">
+                Welcome to
+              </h1>
+              <h1 className="text-white text-[300px] font-cursive">Water</h1>
+            </div>
+          </section>
+
+          {/* Section 1 */}
+          <section className="parallax-section h-screen w-full relative">
+            <div className="parallax-image absolute inset-0 w-full h-full flex items-center justify-center">
+              <img
+                src={image1}
+                alt="Parallax 1"
+                className="max-w-[80%] max-h-[80%] object-contain"
+              />
+            </div>
+          </section>
+
+          <section className="h-[50vh] w-full"></section>
+
+          {/* Section 2 */}
+          <section className="parallax-section h-screen w-full relative">
+            <div className="parallax-image absolute inset-0 w-full h-full flex items-center justify-center">
+              <img
+                src={image2}
+                alt="Parallax 2"
+                className="max-w-[80%] max-h-[80%] object-contain"
+              />
+            </div>
+          </section>
+
+          <section className="h-[50vh] w-full"></section>
+
+          {/* Section 3 */}
+          <section className="parallax-section h-screen w-full relative">
+            <div className="parallax-image absolute inset-0 w-full h-full flex items-center justify-center">
+              <img
+                src={image3}
+                alt="Parallax 3"
+                className="max-w-[80%] max-h-[80%] object-contain"
+              />
+            </div>
+          </section>
+
+          <section className="h-screen w-full flex items-center justify-center">
+            <h1 className="text-white text-2xl font-montserrat">
+              End of Journey
+            </h1>
+          </section>
+        </div>
       </div>
-
-      {/* Add overlay to make images stand out more against background */}
-      <div className="fixed inset-0 w-full h-full z-10 bg-black opacity-20"></div>
-
-      {/* Content sections with z-index to appear above background */}
-      <div className="relative z-20">
-        <section className="h-screen w-full flex items-center justify-center">
-          <div className="block text-center">
-            <h1 className="text-white text-2xl font-montserrat">Welcome to</h1>
-            <h1 className="text-white text-[300px] font-cursive">Water</h1>
-          </div>
-        </section>
-
-        {/* Section 1 */}
-        <section className="parallax-section h-screen w-full relative">
-          <div className="parallax-image absolute inset-0 w-full h-full flex items-center justify-center">
-            <img
-              src={image1}
-              alt="Parallax 1"
-              className="max-w-[80%] max-h-[80%] object-contain"
-            />
-          </div>
-        </section>
-
-        <section className="h-[50vh] w-full"></section>
-
-        {/* Section 2 */}
-        <section className="parallax-section h-screen w-full relative">
-          <div className="parallax-image absolute inset-0 w-full h-full flex items-center justify-center">
-            <img
-              src={image2}
-              alt="Parallax 2"
-              className="max-w-[80%] max-h-[80%] object-contain"
-            />
-          </div>
-        </section>
-
-        <section className="h-[50vh] w-full"></section>
-
-        {/* Section 3 */}
-        <section className="parallax-section h-screen w-full relative">
-          <div className="parallax-image absolute inset-0 w-full h-full flex items-center justify-center">
-            <img
-              src={image3}
-              alt="Parallax 3"
-              className="max-w-[80%] max-h-[80%] object-contain"
-            />
-          </div>
-        </section>
-
-        <section className="h-screen w-full flex items-center justify-center">
-          <h1 className="text-white text-2xl font-montserrat">
-            End of Journey
-          </h1>
-        </section>
-      </div>
-    </div>
+    </PageTransition>
   );
 }
 

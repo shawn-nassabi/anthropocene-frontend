@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 function SpinningIndex() {
   const circlesRef = useRef([]);
   const containerRef = useRef(null);
   const animationRef = useRef(null);
   const [isPaused, setIsPaused] = useState(false);
+  const navigate = useNavigate();
 
   const addToRefs = (el) => {
     if (el && !circlesRef.current.includes(el)) {
@@ -133,6 +134,49 @@ function SpinningIndex() {
     }
   };
 
+  const handlePageTransition = (index, path) => (e) => {
+    e.preventDefault(); // Prevent immediate navigation
+
+    if (animationRef.current) {
+      // Pause the rotation animation
+      animationRef.current.pause();
+      setIsPaused(true);
+
+      // Fade out other circles
+      circlesRef.current.forEach((circle, i) => {
+        if (i !== index) {
+          gsap.to(circle, {
+            scale: 0,
+            opacity: 0,
+            duration: 0.5,
+          });
+        }
+      });
+
+      // Get the clicked circle and its current position
+      const circle = circlesRef.current[index];
+      const circleRect = circle.getBoundingClientRect();
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+
+      // Calculate the scale needed to cover the screen
+      const scaleX = (viewportWidth / circleRect.width) * 1.5;
+      const scaleY = (viewportHeight / circleRect.height) * 1.5;
+      const scale = Math.max(scaleX, scaleY);
+
+      // Create transition animation
+      gsap.to(circle, {
+        scale: scale,
+        duration: 1,
+        ease: "power2.inOut",
+        onComplete: () => {
+          // Navigate to the new page
+          navigate(path);
+        },
+      });
+    }
+  };
+
   // Button data
   const buttons = [
     {
@@ -195,6 +239,7 @@ function SpinningIndex() {
             to={button.path}
             key={index}
             ref={addToRefs}
+            onClick={handlePageTransition(index, button.path)}
             className={`absolute w-52 h-52 rounded-full flex items-center justify-center
                        cursor-pointer transform text-white font-montserrat text-xl z-10
                        border-2 ${button.border} backdrop-blur-sm
