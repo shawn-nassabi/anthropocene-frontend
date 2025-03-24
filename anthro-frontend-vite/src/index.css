@@ -1,1 +1,42 @@
+@import url("https://fonts.googleapis.com/css2?family=Great+Vibes&family=MonteCarlo&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 @import "tailwindcss";
+
+@theme {
+  --font-cursive: Great Vibes, cursive;
+  --font-montserrat: Montserrat, sans-serif;
+
+  --animate-pulse-glow: pulse-glow 3s ease-in-out infinite;
+  @keyframes pulse-glow {
+    0%,
+    100% {
+      transform: scale(1.2);
+      opacity: 0.15;
+      filter: blur(8px);
+    }
+    50% {
+      transform: scale(1.4);
+      opacity: 0.3;
+      filter: blur(12px);
+    }
+  }
+
+  --animate-circle-border: circle-border 8s linear infinite;
+  @keyframes circle-border {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  --animate-shimmer: shimmer 3s linear infinite;
+  @keyframes shimmer {
+    0% {
+      background-position: -200% center;
+    }
+    100% {
+      background-position: 200% center;
+    }
+  }
+}
