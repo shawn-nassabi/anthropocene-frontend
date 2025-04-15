@@ -6,6 +6,9 @@ import PageTransition from "../components/PageTransition";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
+import img3 from "../assets/img3.jpg";
+import img4 from "../assets/img4.jpg";
+
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
 
@@ -72,7 +75,7 @@ function TeamPage() {
                   <div className="team-member bg-gray-900 rounded-lg overflow-hidden shadow-xl">
                     <div className="h-64 overflow-hidden">
                       <img
-                        src="/src/assets/img3.jpg"
+                        src={img3}
                         alt="Team Member 1"
                         className="w-full h-full object-cover"
                       />
@@ -99,7 +102,7 @@ function TeamPage() {
                   <div className="team-member bg-gray-900 rounded-lg overflow-hidden shadow-xl">
                     <div className="h-64 overflow-hidden">
                       <img
-                        src="/src/assets/img4.jpg"
+                        src={img4}
                         alt="Team Member 2"
                         className="w-full h-full object-cover"
                       />

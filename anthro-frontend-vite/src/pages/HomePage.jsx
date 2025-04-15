@@ -6,6 +6,8 @@ import PageTransition from "../components/PageTransition";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
+import davinci from "../assets/davinci.png";
+
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
 
@@ -100,7 +102,7 @@ function HomePage() {
           <div className="absolute inset-0 z-0">
             <img
               className="w-full h-full object-cover opacity-50"
-              src="/src/assets/davinci.png"
+              src={davinci}
               alt="Al Makan Background"
             />
             <div className="absolute inset-0 bg-gradient-to-b from-black/70 to-black/30"></div>
