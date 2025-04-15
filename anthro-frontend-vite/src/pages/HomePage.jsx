@@ -4,6 +4,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import PageTransition from "../components/PageTransition";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
@@ -133,18 +134,18 @@ function HomePage() {
             </Link>
           </div>
 
-          <div
+          {/* <div
             ref={scrollIndicatorRef}
             className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-10"
           >
             <div className="w-6 h-10 border-2 border-white rounded-full flex justify-center">
               <div className="w-1 h-3 bg-white rounded-full mt-2 animate-bounce"></div>
             </div>
-          </div>
+          </div> */}
         </section>
 
         {/* About Section */}
-        <section
+        {/* <section
           ref={aboutRef}
           className="py-20 bg-black relative overflow-hidden"
         >
@@ -183,14 +184,10 @@ function HomePage() {
               </div>
             </div>
           </div>
-        </section>
+        </section> */}
 
         {/* Footer */}
-        <footer className="py-8 bg-black border-t border-gray-800">
-          <div className="container mx-auto px-6 text-center text-gray-500">
-            <p>© {new Date().getFullYear()} Al Makan. All rights reserved.</p>
-          </div>
-        </footer>
+        <Footer />
       </div>
     </PageTransition>
   );

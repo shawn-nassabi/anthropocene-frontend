@@ -4,6 +4,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import PageTransition from "../components/PageTransition";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
@@ -50,7 +51,7 @@ function AboutPage() {
           <div className="container mx-auto px-6">
             <div className="max-w-4xl mx-auto">
               <h1 className="about-title text-5xl md:text-6xl font-serif mb-6 text-amber-400">
-                About Al Makan
+                About Al Makān
               </h1>
               <p className="about-subtitle text-xl md:text-2xl mb-12 text-gray-300">
                 A journey through place, time, and human experience
@@ -58,7 +59,7 @@ function AboutPage() {
 
               <div className="space-y-8">
                 <p className="about-paragraph text-lg text-gray-300">
-                  Al Makan is an immersive digital experience that explores the
+                  Al Makān is an immersive digital experience that explores the
                   profound relationship between humans and their environment.
                   The name "Al Makan" translates to "The Place" in Arabic,
                   reflecting our focus on the significance of location and space
@@ -114,7 +115,7 @@ function AboutPage() {
 
                 <p className="about-paragraph text-lg text-gray-300">
                   Through interactive experiences and visual storytelling, Al
-                  Makan invites visitors to explore these themes and consider
+                  Makān invites visitors to explore these themes and consider
                   their own relationship with the places they inhabit. Each
                   section of our project offers a unique perspective on how
                   environment shapes human experience and vice versa.
@@ -144,11 +145,7 @@ function AboutPage() {
         <div ref={contentRef} className="w-full h-full"></div>
 
         {/* Footer */}
-        <footer className="py-8 bg-black border-t border-gray-800">
-          <div className="container mx-auto px-6 text-center text-gray-500">
-            <p>© {new Date().getFullYear()} Al Makan. All rights reserved.</p>
-          </div>
-        </footer>
+        <Footer />
       </div>
     </PageTransition>
   );

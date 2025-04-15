@@ -131,7 +131,7 @@ function ParallaxPage() {
       <header className="fixed top-0 left-0 w-full z-50 transition-all duration-300">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center text-white hover:text-amber-400 transition-colors duration-300">
           <Link to="/" className="text-2xl font-serif">
-            Al Makan
+            Al Makān
           </Link>
         </div>
       </header>
@@ -148,7 +148,7 @@ function ParallaxPage() {
         </div>
 
         {/* Add overlay to make images stand out more against background */}
-        <div className="fixed inset-0 w-full h-full z-1 bg-black opacity-20"></div>
+        <div className="fixed inset-0 w-full h-full z-0 bg-black opacity-40"></div>
 
         {/* Content sections with z-index to appear above background */}
         <div className="relative z-200">
@@ -158,6 +158,22 @@ function ParallaxPage() {
               <h1 className="text-amber-400 text-[250px] font-serif">
                 {topic.charAt(0).toUpperCase() + topic.slice(1)}
               </h1>
+              <div className="flex flex-col items-center mt-10 animate-bounce">
+                <span className="text-white text-lg mb-2">Scroll down</span>
+                <svg
+                  className="w-6 h-6 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </div>
             </div>
           </section>
 

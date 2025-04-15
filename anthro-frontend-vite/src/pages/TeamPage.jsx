@@ -4,6 +4,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import PageTransition from "../components/PageTransition";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
@@ -53,12 +54,12 @@ function TeamPage() {
                 About the Team
               </h1>
               <p className="team-subtitle text-xl md:text-2xl mb-12 text-gray-300">
-                Meet the creators behind Al Makan
+                Meet the creators behind Al Makān
               </p>
 
               <div className="space-y-12">
                 <p className="text-lg text-gray-300">
-                  Al Makan was created by a team of interdisciplinary
+                  Al Makān was created by a team of interdisciplinary
                   researchers, designers, and developers passionate about
                   exploring the relationship between humans and their
                   environment. Our diverse backgrounds in architecture,
@@ -188,11 +189,7 @@ function TeamPage() {
         <div ref={contentRef} className="w-full h-full"></div>
 
         {/* Footer */}
-        <footer className="py-8 bg-black border-t border-gray-800">
-          <div className="container mx-auto px-6 text-center text-gray-500">
-            <p>© {new Date().getFullYear()} Al Makan. All rights reserved.</p>
-          </div>
-        </footer>
+        <Footer />
       </div>
     </PageTransition>
   );

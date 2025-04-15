@@ -46,7 +46,7 @@ function Header({ contentRef }) {
     >
       <div className="container mx-auto px-6 py-4 flex justify-between items-center text-white">
         <Link to="/" className="text-2xl font-serif">
-          Al Makan
+          Al Makān
         </Link>
         <nav>
           <ul className="flex space-x-8">
