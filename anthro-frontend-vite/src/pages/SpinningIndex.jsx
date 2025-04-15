@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
+import Header from "../components/Header";
 
 function SpinningIndex() {
   const circlesRef = useRef([]);
@@ -8,6 +9,8 @@ function SpinningIndex() {
   const animationRef = useRef(null);
   const [isPaused, setIsPaused] = useState(false);
   const navigate = useNavigate();
+  const { topic } = useParams();
+  const FRAME_PATH = `/frames/${topic}/frame_`;
 
   const addToRefs = (el) => {
     if (el && !circlesRef.current.includes(el)) {
@@ -181,28 +184,28 @@ function SpinningIndex() {
   const buttons = [
     {
       label: "Water",
-      path: "/parallax",
+      path: "/parallax/water",
       color: "bg-cyan-600",
       gradient: "from-cyan-600 via-cyan-500 to-cyan-600",
       border: "border-cyan-400",
     },
     {
       label: "Materiality",
-      path: "/parallax",
+      path: "/parallax/materiality",
       color: "bg-amber-700",
       gradient: "from-amber-700 via-amber-600 to-amber-700",
       border: "border-amber-500",
     },
     {
       label: "Time",
-      path: "/parallax",
+      path: "/parallax/time",
       color: "bg-emerald-700",
       gradient: "from-emerald-700 via-emerald-600 to-emerald-700",
       border: "border-emerald-500",
     },
     {
       label: "Mobility",
-      path: "/parallax",
+      path: "/parallax/mobility",
       color: "bg-slate-600",
       gradient: "from-slate-600 via-slate-500 to-slate-600",
       border: "border-slate-400",
@@ -211,6 +214,7 @@ function SpinningIndex() {
 
   return (
     <div className="h-screen w-full bg-black flex items-center justify-center overflow-hidden">
+      <Header />
       {/* Background ambient circles */}
       <div className="fixed inset-0 overflow-hidden opacity-20">
         <div

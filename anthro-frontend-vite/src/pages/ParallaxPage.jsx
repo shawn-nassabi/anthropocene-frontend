@@ -1,26 +1,35 @@
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
+import { Link, useLocation, useParams } from "react-router";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import PageTransition from "../components/PageTransition";
 
 import image1 from "../assets/img1.jpg";
 import image2 from "../assets/img2.jpg";
 import image3 from "../assets/img3.jpg";
-// Import the video - update this path to your actual desert video
-import desertDriveVideo from "../assets/mountain_drive_12s.mp4";
+
+const FRAME_COUNTS = {
+  water: 90,
+  materiality: 0,
+  time: 79,
+  mobility: 86,
+};
 
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
 
 // Constants for frame animation
-const TOTAL_FRAMES = 96; // Total number of frames (96 frames from 001 to 096)
-const FRAME_PATH = "/mountain_8s_frames/frame_"; // Path to frames in public folder
+// const TOTAL_FRAMES = 96; // Total number of frames (96 frames from 001 to 096)
+// const FRAME_PATH = "/mountain_8s_frames/frame_"; // Path to frames in public folder
 
 function ParallaxPage() {
   const containerRef = useRef(null);
   const [currentFrame, setCurrentFrame] = useState(1);
   const frameImageRef = useRef(null);
   const preloadedImagesRef = useRef({});
+  const { topic } = useParams();
+  const FRAME_PATH = `/frames/${topic}/frame_`; // Path to frames in public folder
+  const TOTAL_FRAMES = FRAME_COUNTS[topic] || 96; // fallback if topic is unknown
 
   // Preload images for smoother scrolling
   useEffect(() => {
@@ -118,6 +127,14 @@ function ParallaxPage() {
 
   return (
     <PageTransition>
+      {/* Header */}
+      <header className="fixed top-0 left-0 w-full z-50 transition-all duration-300">
+        <div className="container mx-auto px-6 py-4 flex justify-between items-center text-white hover:text-amber-400 transition-colors duration-300">
+          <Link to="/" className="text-2xl font-serif">
+            Al Makan
+          </Link>
+        </div>
+      </header>
       <div ref={containerRef} className="relative w-full bg-black">
         {/* Background Frame */}
         <div className="fixed inset-0 w-full h-full z-0">
@@ -131,16 +148,16 @@ function ParallaxPage() {
         </div>
 
         {/* Add overlay to make images stand out more against background */}
-        <div className="fixed inset-0 w-full h-full z-10 bg-black opacity-20"></div>
+        <div className="fixed inset-0 w-full h-full z-1 bg-black opacity-20"></div>
 
         {/* Content sections with z-index to appear above background */}
-        <div className="relative z-20">
+        <div className="relative z-200">
           <section className="h-screen w-full flex items-center justify-center">
             <div className="block text-center">
-              <h1 className="text-white text-2xl font-montserrat">
-                Welcome to
+              <h1 className="text-white text-2xl font-montserrat"></h1>
+              <h1 className="text-amber-400 text-[250px] font-serif">
+                {topic.charAt(0).toUpperCase() + topic.slice(1)}
               </h1>
-              <h1 className="text-white text-[300px] font-cursive">Water</h1>
             </div>
           </section>
 
