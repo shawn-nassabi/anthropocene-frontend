@@ -7,6 +7,7 @@ import PageTransition from "../components/PageTransition";
 import image1 from "../assets/img1.jpg";
 import image2 from "../assets/img2.jpg";
 import image3 from "../assets/img3.jpg";
+import Header from "../components/Header";
 
 const FRAME_COUNTS = {
   water: 90,
@@ -14,6 +15,35 @@ const FRAME_COUNTS = {
   time: 79,
   mobility: 86,
 };
+
+// Sample topics
+const topics = [
+  {
+    id: "water",
+    title: "Water",
+    description: "Explore the vital role of water in our ecosystems.",
+    // Optionally add other data such as an image URL if different from the parallax background
+    link: "/post/water",
+  },
+  {
+    id: "materiality",
+    title: "Materiality",
+    description: "Dive into the essence of materiality in design and nature.",
+    link: "/post/materiality",
+  },
+  {
+    id: "time",
+    title: "Time",
+    description: "Discover how time shapes our understanding of the world.",
+    link: "/post/time",
+  },
+  {
+    id: "mobility",
+    title: "Mobility",
+    description: "Learn about the shifts in mobility and social movement.",
+    link: "/post/mobility",
+  },
+];
 
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
@@ -128,13 +158,14 @@ function ParallaxPage() {
   return (
     <PageTransition>
       {/* Header */}
-      <header className="fixed top-0 left-0 w-full z-50 transition-all duration-300">
+      {/* <header className="fixed top-0 left-0 w-full z-50 transition-all duration-300">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center text-white hover:text-amber-400 transition-colors duration-300">
           <Link to="/" className="text-2xl font-serif">
             Al Makān
           </Link>
         </div>
-      </header>
+      </header> */}
+      <Header lightMode={false} />
       <div ref={containerRef} className="relative w-full bg-black">
         {/* Background Frame */}
         <div className="fixed inset-0 w-full h-full z-0">
@@ -177,8 +208,41 @@ function ParallaxPage() {
             </div>
           </section>
 
+          <section className="h-[50vh] w-full"></section>
+
+          {topics.map((topicData, index) => (
+            <section
+              key={topicData.id}
+              className="parallax-section h-screen w-full relative"
+            >
+              {/* Background Image for the section */}
+              <div className="parallax-image absolute inset-0 w-full h-full  flex items-center justify-center">
+                <img
+                  src={image1}
+                  alt={topicData.title}
+                  className="max-w-[80%] max-h-[80%] object-contain"
+                />
+              </div>
+              {/* Content Overlay */}
+              <div className="relative z-10 flex flex-col items-center justify-start h-full pt-24">
+                <h2 className="text-6xl text-white font-serif mb-4">
+                  {topicData.title}
+                </h2>
+                <p className="text-white max-w-xl text-center mb-6">
+                  {topicData.description}
+                </p>
+                <Link
+                  to={topicData.link}
+                  className="px-5 py-2 bg-amber-500 text-white font-semibold rounded-full hover:bg-amber-600 transition"
+                >
+                  Read More
+                </Link>
+              </div>
+            </section>
+          ))}
+
           {/* Section 1 */}
-          <section className="parallax-section h-screen w-full relative">
+          {/* <section className="parallax-section h-screen w-full relative">
             <div className="parallax-image absolute inset-0 w-full h-full flex items-center justify-center">
               <img
                 src={image1}
@@ -188,10 +252,10 @@ function ParallaxPage() {
             </div>
           </section>
 
-          <section className="h-[50vh] w-full"></section>
+          <section className="h-[50vh] w-full"></section> */}
 
           {/* Section 2 */}
-          <section className="parallax-section h-screen w-full relative">
+          {/* <section className="parallax-section h-screen w-full relative">
             <div className="parallax-image absolute inset-0 w-full h-full flex items-center justify-center">
               <img
                 src={image2}
@@ -201,10 +265,10 @@ function ParallaxPage() {
             </div>
           </section>
 
-          <section className="h-[50vh] w-full"></section>
+          <section className="h-[50vh] w-full"></section> */}
 
           {/* Section 3 */}
-          <section className="parallax-section h-screen w-full relative">
+          {/* <section className="parallax-section h-screen w-full relative">
             <div className="parallax-image absolute inset-0 w-full h-full flex items-center justify-center">
               <img
                 src={image3}
@@ -212,7 +276,7 @@ function ParallaxPage() {
                 className="max-w-[80%] max-h-[80%] object-contain"
               />
             </div>
-          </section>
+          </section> */}
 
           <section className="h-screen w-full flex items-center justify-center">
             <h1 className="text-white text-2xl font-montserrat">

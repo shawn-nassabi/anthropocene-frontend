@@ -6,9 +6,10 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
 
-function Header({ contentRef }) {
+function Header({ contentRef, lightMode }) {
   const headerRef = useRef(null);
   const location = useLocation();
+  const textColor = lightMode ? "black" : "white";
 
   useEffect(() => {
     // Header animation on scroll
@@ -44,7 +45,11 @@ function Header({ contentRef }) {
       ref={headerRef}
       className="fixed top-0 left-0 w-full z-50 transition-all duration-300"
     >
-      <div className="container mx-auto px-6 py-4 flex justify-between items-center text-white">
+      <div
+        className={`container mx-auto px-6 py-4 flex justify-between items-center ${
+          lightMode ? "text-black" : "text-white"
+        }`}
+      >
         <Link to="/" className="text-2xl font-serif">
           Al Makān
         </Link>
@@ -56,6 +61,8 @@ function Header({ contentRef }) {
                 className={`transition-colors duration-300 ${
                   location.pathname === "/about"
                     ? "text-amber-400 hover:text-amber-300"
+                    : lightMode
+                    ? "text-black hover:text-amber-400"
                     : "text-white hover:text-amber-400"
                 }`}
               >
@@ -68,6 +75,8 @@ function Header({ contentRef }) {
                 className={`transition-colors duration-300 ${
                   location.pathname === "/team"
                     ? "text-amber-400 hover:text-amber-300"
+                    : lightMode
+                    ? "text-black hover:text-amber-400"
                     : "text-white hover:text-amber-400"
                 }`}
               >
@@ -80,6 +89,8 @@ function Header({ contentRef }) {
                 className={`transition-colors duration-300 ${
                   location.pathname === "/spinningindex"
                     ? "text-amber-400 hover:text-amber-300"
+                    : lightMode
+                    ? "text-black hover:text-amber-400"
                     : "text-white hover:text-amber-400"
                 }`}
               >

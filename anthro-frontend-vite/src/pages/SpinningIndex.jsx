@@ -214,25 +214,25 @@ function SpinningIndex() {
 
   return (
     <div className="h-screen w-full bg-black flex items-center justify-center overflow-hidden">
-      <Header />
+      <Header lightMode={false} />
       {/* Background ambient circles */}
-      <div className="fixed inset-0 overflow-hidden opacity-20">
+      {/* <div className="fixed inset-0 overflow-hidden opacity-100">
         <div
-          className="absolute w-[100vh] h-[100vh] rounded-full border border-white/10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+          className="absolute w-[100vh] h-[100vh] rounded-full border border-white/50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
           style={{ animation: "var(--animate-circle-border)" }}
         />
         <div
-          className="absolute w-[80vh] h-[80vh] rounded-full border border-white/10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+          className="absolute w-[80vh] h-[80vh] rounded-full border border-white/50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
           style={{
             animation: "var(--animate-circle-border)",
             animationDirection: "reverse",
           }}
         />
         <div
-          className="absolute w-[60vh] h-[60vh] rounded-full border border-white/10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+          className="absolute w-[60vh] h-[60vh] rounded-full border border-white/50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
           style={{ animation: "var(--animate-circle-border)" }}
         />
-      </div>
+      </div> */}
 
       <div
         ref={containerRef}
