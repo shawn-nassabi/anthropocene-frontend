@@ -8,6 +8,8 @@ import image1 from "../assets/img1.jpg";
 import image2 from "../assets/img2.jpg";
 import image3 from "../assets/img3.jpg";
 import Header from "../components/Header";
+import { useQuery } from "@tanstack/react-query";
+import { getTopicPage, getPageImages } from "../utils/wp";
 
 const FRAME_COUNTS = {
   water: 90,
@@ -55,11 +57,23 @@ gsap.registerPlugin(ScrollTrigger);
 function ParallaxPage() {
   const containerRef = useRef(null);
   const [currentFrame, setCurrentFrame] = useState(1);
+  const [parsedImageMetadata, setParsedImageMetadata] = useState([]);
   const frameImageRef = useRef(null);
   const preloadedImagesRef = useRef({});
   const { topic } = useParams();
   const FRAME_PATH = `/frames/${topic}/frame_`; // Path to frames in public folder
   const TOTAL_FRAMES = FRAME_COUNTS[topic] || 96; // fallback if topic is unknown
+
+  const { data: topicPage } = useQuery({
+    queryKey: ["topicPage", topic],
+    queryFn: () => getTopicPage(topic),
+  });
+
+  const { data: subtopicImages } = useQuery({
+    queryKey: ["subtopicImages", topicPage?.id],
+    queryFn: () => getPageImages(topicPage.id),
+    enabled: Boolean(topicPage?.id),
+  });
 
   // Preload images for smoother scrolling
   useEffect(() => {
@@ -83,6 +97,58 @@ function ParallaxPage() {
       preloadedImagesRef.current[frameNumber] = img;
     }
   }, []);
+
+  // Helper function to extract and parse JSON from data-image-json attribute
+  function extractJsonFromDataAttribute(renderedHtml) {
+    if (!renderedHtml) return null;
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(renderedHtml, "text/html");
+    const dataElement = doc.querySelector("[data-image-json]");
+    if (dataElement) {
+      const jsonString = dataElement.getAttribute("data-image-json");
+      try {
+        return JSON.parse(jsonString);
+      } catch (e) {
+        console.error(
+          "Failed to parse JSON from data attribute:",
+          e,
+          "\nString was:",
+          jsonString
+        );
+        return null;
+      }
+    }
+    // console.warn("Could not find data-image-json attribute in the provided HTML description.");
+    return null;
+  }
+
+  // Effect to parse metadata when subtopicImages are available
+  useEffect(() => {
+    if (subtopicImages && subtopicImages.length > 0) {
+      console.log("Subtopic images received:", subtopicImages); // Debug log
+      const allMetadata = subtopicImages.map((img) => {
+        let jsonData = null;
+        if (img.description && img.description.rendered) {
+          jsonData = extractJsonFromDataAttribute(img.description.rendered);
+          console.log("Parsed JSON data for image:", img.id, jsonData); // Debug log
+        }
+        return {
+          id: img.id,
+          data: {
+            title: jsonData?.title || "N/A",
+            description: jsonData?.description || "N/A",
+            date: jsonData?.date || "N/A",
+            artist: jsonData?.artist || "N/A",
+            credit: jsonData?.credit || "N/A",
+          },
+        };
+      });
+      console.log("Final metadata array:", allMetadata); // Debug log
+      setParsedImageMetadata(allMetadata);
+    } else {
+      setParsedImageMetadata([]); // Clear if no images or subtopicImages is null
+    }
+  }, [subtopicImages]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -128,7 +194,7 @@ function ParallaxPage() {
       tl.fromTo(
         image,
         {
-          scale: 0.5,
+          scale: 0.2,
           opacity: 0,
           transformOrigin: "center center",
         },
@@ -155,16 +221,16 @@ function ParallaxPage() {
     return `${FRAME_PATH}${paddedNumber}.webp`;
   };
 
+  // Helps remove the <p> tags from the caption string of an image
+  function cleanCaptionSlug(captionRendered) {
+    if (!captionRendered) return "";
+    const doc = new DOMParser().parseFromString(captionRendered, "text/html");
+    return doc.body.textContent.trim(); // removes <p> tags and whitespace
+  }
+
   return (
     <PageTransition>
       {/* Header */}
-      {/* <header className="fixed top-0 left-0 w-full z-50 transition-all duration-300">
-        <div className="container mx-auto px-6 py-4 flex justify-between items-center text-white hover:text-amber-400 transition-colors duration-300">
-          <Link to="/" className="text-2xl font-serif">
-            Al Makān
-          </Link>
-        </div>
-      </header> */}
       <Header lightMode={false} />
       <div ref={containerRef} className="relative w-full bg-black">
         {/* Background Frame */}
@@ -210,29 +276,25 @@ function ParallaxPage() {
 
           <section className="h-[50vh] w-full"></section>
 
-          {topics.map((topicData, index) => (
+          {subtopicImages?.map((img, index) => (
             <section
-              key={topicData.id}
+              key={img.id}
               className="parallax-section h-screen w-full relative"
             >
-              {/* Background Image for the section */}
-              <div className="parallax-image absolute inset-0 w-full h-full  flex items-center justify-center">
+              <div className="parallax-image absolute inset-0 w-full h-full flex items-center justify-center">
                 <img
-                  src={image1}
-                  alt={topicData.title}
+                  src={img.source_url}
+                  alt={img.alt_text || ""}
                   className="max-w-[80%] max-h-[80%] object-contain"
                 />
               </div>
-              {/* Content Overlay */}
               <div className="relative z-10 flex flex-col items-center justify-start h-full pt-24">
                 <h2 className="text-6xl text-white font-serif mb-4">
-                  {topicData.title}
+                  {img.alt_text}
                 </h2>
-                <p className="text-white max-w-xl text-center mb-6">
-                  {topicData.description}
-                </p>
+
                 <Link
-                  to={topicData.link}
+                  to={`/subtopic/${cleanCaptionSlug(img.caption?.rendered)}`}
                   className="px-5 py-2 bg-amber-500 text-white font-semibold rounded-full hover:bg-amber-600 transition"
                 >
                   Read More
@@ -278,10 +340,69 @@ function ParallaxPage() {
             </div>
           </section> */}
 
-          <section className="h-screen w-full flex items-center justify-center">
-            <h1 className="text-white text-2xl font-montserrat">
-              End of Journey
-            </h1>
+          <section className="h-screen w-full items-center justify-center">
+            {/* Metadata Table Section */}
+            {parsedImageMetadata.length > 0 && (
+              <>
+                <div className="container mx-auto px-6 pb-38">
+                  <h2 className="text-4xl font-serif text-amber-400 mb-12 text-center">
+                    Image Details
+                  </h2>
+                  <div className="overflow-x-auto shadow-md rounded-lg">
+                    <table className="w-full min-w-max text-left">
+                      <thead className="bg-gray-900 text-slate-300 uppercase text-sm">
+                        <tr>
+                          <th className="py-3 px-6 border-b border-slate-700">
+                            Title
+                          </th>
+                          <th className="py-3 px-6 border-b border-slate-700">
+                            Description
+                          </th>
+                          <th className="py-3 px-6 border-b border-slate-700">
+                            Date
+                          </th>
+                          <th className="py-3 px-6 border-b border-slate-700">
+                            Artist
+                          </th>
+                          <th className="py-3 px-6 border-b border-slate-700">
+                            Credit
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-black text-slate-400">
+                        {parsedImageMetadata.map((meta) => (
+                          <tr
+                            key={meta.id}
+                            className="hover:bg-slate-700 transition-colors duration-150 ease-in-out"
+                          >
+                            <td className="py-4 px-6 border-b border-slate-700">
+                              {meta.data.title}
+                            </td>
+                            <td className="py-4 px-6 border-b border-slate-700">
+                              {meta.data.description}
+                            </td>
+                            <td className="py-4 px-6 border-b border-slate-700">
+                              {meta.data.date}
+                            </td>
+                            <td className="py-4 px-6 border-b border-slate-700">
+                              {meta.data.artist}
+                            </td>
+                            <td className="py-4 px-6 border-b border-slate-700">
+                              {meta.data.credit}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </>
+            )}
+            <div className="flex flex-col items-center justify-center">
+              <h1 className="text-white text-2xl font-montserrat">
+                End of Journey
+              </h1>
+            </div>
           </section>
         </div>
       </div>

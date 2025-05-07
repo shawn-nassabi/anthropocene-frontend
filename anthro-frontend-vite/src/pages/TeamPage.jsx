@@ -1,13 +1,12 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import PageTransition from "../components/PageTransition";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-
-import img3 from "../assets/img3.jpg";
-import img4 from "../assets/img4.jpg";
+import { useQuery } from "@tanstack/react-query";
+import { getTeamMembers } from "../utils/wp";
 
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
@@ -15,6 +14,12 @@ gsap.registerPlugin(ScrollTrigger);
 function TeamPage() {
   const contentRef = useRef(null);
   const contentWrapperRef = useRef(null);
+  const [expandedMember, setExpandedMember] = useState(null);
+
+  const { data: teamMembers, isLoading } = useQuery({
+    queryKey: ["teamMembers"],
+    queryFn: getTeamMembers,
+  });
 
   useEffect(() => {
     // Content animations
@@ -43,11 +48,22 @@ function TeamPage() {
     };
   }, []);
 
+  // Function to get excerpt from content
+  const getExcerpt = (content, maxLength = 200) => {
+    if (!content) return "";
+    // Remove HTML tags
+    const plainText = content.replace(/<[^>]+>/g, "");
+    // Get first sentence or truncate
+    const firstSentence = plainText.split(/[.!?]+/)[0];
+    if (firstSentence.length <= maxLength) return firstSentence + ".";
+    return plainText.substring(0, maxLength) + "...";
+  };
+
   return (
     <PageTransition>
-      <div className="relative w-full min-h-screen bg-gray-100 text-gray-900 overflow-hidden">
+      <div className="relative w-full min-h-screen bg-black text-white overflow-hidden">
         {/* Header */}
-        <Header contentRef={contentRef} lightMode={true} />
+        <Header contentRef={contentRef} lightMode={false} />
 
         {/* Content */}
         <div ref={contentWrapperRef} className="pt-32 pb-20 min-h-screen">
@@ -56,12 +72,12 @@ function TeamPage() {
               <h1 className="team-title text-5xl md:text-6xl font-serif mb-6 text-amber-400">
                 About the Team
               </h1>
-              <p className="team-subtitle text-xl md:text-2xl mb-12 text-gray-600">
+              <p className="team-subtitle text-xl md:text-2xl mb-12 text-amber-200">
                 Meet the creators behind Al Makān
               </p>
 
               <div className="space-y-12">
-                <p className="text-lg text-gray-700">
+                <p className="text-lg text-gray-300">
                   Al Makān was created by a team of interdisciplinary
                   researchers, designers, and developers passionate about
                   exploring the relationship between humans and their
@@ -70,115 +86,63 @@ function TeamPage() {
                   design inform our approach to this project.
                 </p>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  {/* Team Member 1 */}
-                  <div className="team-member bg-gray-100 rounded-lg overflow-hidden shadow-xl border border-gray-200">
-                    <div className="h-64 overflow-hidden">
-                      <img
-                        src={img3}
-                        alt="Team Member 1"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className="p-6">
-                      <h3 className="text-2xl font-medium text-amber-500 mb-2">
-                        Marzia Balzani
-                      </h3>
-                      <p className="text-amber-600 mb-3">Project Lead</p>
-                      <p className="text-gray-700">
-                        Marzia Balzani is a social anthropologist. Her
-                        publications have focused in particular on ritual and
-                        kingship among the social and political elites of
-                        Rajasthan in northern India, and she is currently
-                        working on diasporic Islam in the UK and Pakistan.
-                        Balzani’s work combines ethnography and history and is
-                        at present extending into considerations of
-                        globalization and urban space.
-                      </p>
-                    </div>
+                {isLoading ? (
+                  <div className="text-center py-8">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-400 mx-auto"></div>
+                    <p className="mt-4 text-gray-400">
+                      Loading team members...
+                    </p>
                   </div>
-
-                  {/* Team Member 2 */}
-                  <div className="team-member bg-gray-100 rounded-lg overflow-hidden shadow-xl border border-gray-200">
-                    <div className="h-64 overflow-hidden">
-                      <img
-                        src={img4}
-                        alt="Team Member 2"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className="p-6">
-                      <h3 className="text-2xl font-medium text-amber-500 mb-2">
-                        Fiona Kidd
-                      </h3>
-                      <p className="text-amber-600 mb-3">Project Lead</p>
-                      <p className="text-gray-700">
-                        Fiona Kidd is an Assistant Professor of History and Art
-                        and Art History at New York University Abu Dhabi. She
-                        teaches in the history, art and art history, and ancient
-                        world programs, with a special focus on Central Asia.
-                        She has been involved in archaeological, museum-based,
-                        and archival research in Central Asia for almost 20
-                        years.
-                      </p>
-                    </div>
+                ) : (
+                  <div className="space-y-8">
+                    {teamMembers?.map((member) => (
+                      <div
+                        key={member.id}
+                        className="team-member bg-gray-900 rounded-lg overflow-hidden shadow-[0_0_15px_rgba(251,191,36,0.3)] hover:shadow-[0_0_20px_rgba(251,191,36,0.5)] transition-shadow duration-300 border border-gray-800"
+                      >
+                        <div className="p-6">
+                          <h3 className="text-2xl font-medium text-amber-400 mb-2">
+                            {member.title.rendered}
+                          </h3>
+                          <div className="text-gray-300">
+                            <div
+                              className={`mb-4 ${
+                                expandedMember === member.id
+                                  ? ""
+                                  : "line-clamp-3"
+                              }`}
+                              dangerouslySetInnerHTML={{
+                                __html:
+                                  expandedMember === member.id
+                                    ? member.content.rendered
+                                    : getExcerpt(member.content.rendered),
+                              }}
+                            />
+                            <button
+                              onClick={() =>
+                                setExpandedMember(
+                                  expandedMember === member.id
+                                    ? null
+                                    : member.id
+                                )
+                              }
+                              className="text-amber-400 hover:text-amber-300 transition-colors duration-200"
+                            >
+                              {expandedMember === member.id
+                                ? "Show Less"
+                                : "Read More"}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-
-                  {/* Team Member 3 */}
-                  {/* <div className="team-member bg-gray-100 rounded-lg overflow-hidden shadow-xl border border-gray-200">
-                    <div className="h-64 overflow-hidden">
-                      <img
-                        src="/src/assets/img5.jpg"
-                        alt="Team Member 3"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className="p-6">
-                      <h3 className="text-2xl font-medium text-amber-500 mb-2">
-                        Aisha Hassan
-                      </h3>
-                      <p className="text-amber-600 mb-3">
-                        Cultural Anthropologist
-                      </p>
-                      <p className="text-gray-700">
-                        Aisha's work explores how cultural practices and beliefs
-                        shape our relationship with the environment. Her
-                        fieldwork in various regions has provided valuable
-                        insights for this project.
-                      </p>
-                    </div>
-                  </div> */}
-
-                  {/* Team Member 4 */}
-                  {/* <div className="team-member bg-gray-100 rounded-lg overflow-hidden shadow-xl border border-gray-200">
-                    <div className="h-64 overflow-hidden">
-                      <img
-                        src="/src/assets/img6.jpg"
-                        alt="Team Member 4"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className="p-6">
-                      <h3 className="text-2xl font-medium text-amber-500 mb-2">
-                        Michael Rodriguez
-                      </h3>
-                      <p className="text-amber-600 mb-3">
-                        Visual Artist & Photographer
-                      </p>
-                      <p className="text-gray-700">
-                        Michael's stunning visual work captures the essence of
-                        places and their transformation over time. His
-                        photography and video work form the visual backbone of
-                        the Al Makan experience.
-                      </p>
-                    </div>
-                  </div> */}
-                </div>
+                )}
 
                 <div className="mt-12 text-center">
                   <Link
                     to="/spinningindex"
-                    className="inline-block px-5 py-2 bg-transparent border border-amber-600 text-amber-600 text-lg font-medium rounded-4xl hover:bg-amber-600 hover:text-white transition-colors duration-300 transform"
+                    className="inline-block px-5 py-2 bg-transparent border border-amber-400 text-amber-400 text-lg font-medium rounded-4xl hover:bg-amber-400 hover:text-black transition-colors duration-300 transform"
                   >
                     Explore the Project
                   </Link>
