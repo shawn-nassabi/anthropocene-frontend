@@ -40,22 +40,22 @@ function HomePage() {
         { y: 30, opacity: 0 },
         { y: 0, opacity: 1, duration: 0.8 },
         "-=0.6"
-      )
-      .fromTo(
-        scrollIndicatorRef.current,
-        { y: 0, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8 },
-        "-=0.4"
       );
+    // .fromTo(
+    //   scrollIndicatorRef.current,
+    //   { y: 0, opacity: 0 },
+    //   { y: 0, opacity: 1, duration: 0.8 },
+    //   "-=0.4"
+    // );
 
     // Scroll indicator animation
-    gsap.to(scrollIndicatorRef.current, {
-      y: 10,
-      repeat: -1,
-      yoyo: true,
-      duration: 1.5,
-      ease: "power1.inOut",
-    });
+    // gsap.to(scrollIndicatorRef.current, {
+    //   y: 10,
+    //   repeat: -1,
+    //   yoyo: true,
+    //   duration: 1.5,
+    //   ease: "power1.inOut",
+    // });
 
     // About section animations
     const aboutTl = gsap.timeline({
@@ -67,18 +67,18 @@ function HomePage() {
       },
     });
 
-    aboutTl
-      .fromTo(
-        ".about-image",
-        { x: -100, opacity: 0 },
-        { x: 0, opacity: 1, duration: 1.2 }
-      )
-      .fromTo(
-        ".about-text",
-        { x: 100, opacity: 0 },
-        { x: 0, opacity: 1, duration: 1.2 },
-        "-=0.8"
-      );
+    // aboutTl
+    //   .fromTo(
+    //     ".about-image",
+    //     { x: -100, opacity: 0 },
+    //     { x: 0, opacity: 1, duration: 1.2 }
+    //   )
+    //   .fromTo(
+    //     ".about-text",
+    //     { x: 100, opacity: 0 },
+    //     { x: 0, opacity: 1, duration: 1.2 },
+    //     "-=0.8"
+    //   );
 
     return () => {
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
