@@ -51,12 +51,17 @@ function TeamPage() {
   // Function to get excerpt from content
   const getExcerpt = (content, maxLength = 200) => {
     if (!content) return "";
-    // Remove HTML tags
-    const plainText = content.replace(/<[^>]+>/g, "");
-    // Get first sentence or truncate
-    const firstSentence = plainText.split(/[.!?]+/)[0];
-    if (firstSentence.length <= maxLength) return firstSentence + ".";
-    return plainText.substring(0, maxLength) + "...";
+
+    // Create a temporary div to parse HTML
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = content;
+
+    // Get the first paragraph
+    const firstParagraph = tempDiv.querySelector("p");
+    if (!firstParagraph) return "";
+
+    // Get the text content and remove the period
+    return firstParagraph.textContent.replace(/\.$/, "").trim();
   };
 
   return (
@@ -77,14 +82,7 @@ function TeamPage() {
               </p>
 
               <div className="space-y-12">
-                <p className="text-lg text-gray-300">
-                  Al Makān was created by a team of interdisciplinary
-                  researchers, designers, and developers passionate about
-                  exploring the relationship between humans and their
-                  environment. Our diverse backgrounds in architecture,
-                  environmental studies, digital humanities, and interactive
-                  design inform our approach to this project.
-                </p>
+                <p className="text-lg text-gray-300"></p>
 
                 {isLoading ? (
                   <div className="text-center py-8">
@@ -105,19 +103,18 @@ function TeamPage() {
                             {member.title.rendered}
                           </h3>
                           <div className="text-gray-300">
-                            <div
-                              className={`mb-4 ${
-                                expandedMember === member.id
-                                  ? ""
-                                  : "line-clamp-3"
-                              }`}
-                              dangerouslySetInnerHTML={{
-                                __html:
-                                  expandedMember === member.id
-                                    ? member.content.rendered
-                                    : getExcerpt(member.content.rendered),
-                              }}
-                            />
+                            {expandedMember === member.id ? (
+                              <div
+                                className="mb-4"
+                                dangerouslySetInnerHTML={{
+                                  __html: member.content.rendered,
+                                }}
+                              />
+                            ) : (
+                              <p className="mb-4 line-clamp-1 text-amber-200">
+                                {getExcerpt(member.content.rendered)}
+                              </p>
+                            )}
                             <button
                               onClick={() =>
                                 setExpandedMember(

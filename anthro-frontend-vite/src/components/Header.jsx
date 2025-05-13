@@ -66,7 +66,7 @@ function Header({ contentRef, lightMode }) {
                     : "text-white hover:text-amber-400"
                 }`}
               >
-                About
+                About Al Makān
               </Link>
             </li>
             <li>
@@ -95,6 +95,20 @@ function Header({ contentRef, lightMode }) {
                 }`}
               >
                 Explore
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/search"
+                className={`transition-colors duration-300 ${
+                  location.pathname === "/search"
+                    ? "text-amber-400 hover:text-amber-300"
+                    : lightMode
+                    ? "text-black hover:text-amber-400"
+                    : "text-white hover:text-amber-400"
+                }`}
+              >
+                Search
               </Link>
             </li>
           </ul>

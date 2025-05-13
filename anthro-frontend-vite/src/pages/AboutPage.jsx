@@ -150,7 +150,13 @@ function AboutPage() {
                   </p>
                 </div>
 
-                <div className="about-paragraph mt-12 text-center">
+                <div className="about-paragraph flex flex-col items-center space-y-4 mt-12">
+                  <Link
+                    to="/bibliography"
+                    className="inline-block px-5 py-2 bg-transparent border border-amber-400 text-amber-400 text-lg font-medium rounded-4xl hover:bg-amber-400 hover:text-black transition-colors duration-300 transform"
+                  >
+                    View Bibliography
+                  </Link>
                   <Link
                     to="/spinningindex"
                     className="inline-block px-5 py-2 bg-transparent border border-amber-400 text-amber-400 text-lg font-medium rounded-4xl hover:bg-amber-400 hover:text-black transition-colors duration-300 transform"
