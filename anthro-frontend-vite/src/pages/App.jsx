@@ -7,6 +7,8 @@ import FloatingObjects from "./FloatingObjects";
 import TeamPage from "./TeamPage";
 import PostPage from "./PostPage";
 import ListPostsPage from "./ListPostsPage";
+import SearchPage from "./SearchPage";
+import BibliographyPage from "./BibliographyPage";
 
 function App() {
   return (
@@ -20,6 +22,8 @@ function App() {
         <Route path="/post/:topic" element={<PostPage />} />
         <Route path="/float" element={<FloatingObjects />} />
         <Route path="/team" element={<TeamPage />} />
+        <Route path="/search" element={<SearchPage />} />
+        <Route path="/bibliography" element={<BibliographyPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>

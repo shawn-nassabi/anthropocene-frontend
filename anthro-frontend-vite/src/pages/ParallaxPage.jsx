@@ -343,62 +343,40 @@ function ParallaxPage() {
           <section className="h-screen w-full items-center justify-center">
             {/* Metadata Table Section */}
             {parsedImageMetadata.length > 0 && (
-              <>
-                <div className="container mx-auto px-6 pb-38">
-                  <h2 className="text-4xl font-serif text-amber-400 mb-12 text-center">
-                    Image Details
-                  </h2>
-                  <div className="overflow-x-auto shadow-md rounded-lg">
-                    <table className="w-full min-w-max text-left">
-                      <thead className="bg-gray-900 text-slate-300 uppercase text-sm">
-                        <tr>
-                          <th className="py-3 px-6 border-b border-slate-700">
-                            Title
-                          </th>
-                          <th className="py-3 px-6 border-b border-slate-700">
-                            Description
-                          </th>
-                          <th className="py-3 px-6 border-b border-slate-700">
-                            Date
-                          </th>
-                          <th className="py-3 px-6 border-b border-slate-700">
-                            Artist
-                          </th>
-                          <th className="py-3 px-6 border-b border-slate-700">
-                            Credit
-                          </th>
+              <div className="container mx-auto px-6 py-16">
+                <h2 className="text-4xl font-serif text-amber-400 mb-12 text-center">
+                  Image Details
+                </h2>
+                <div className="overflow-x-auto backdrop-blur-md rounded-lg p-2 shadow-2xl shadow-amber-500/10 border border-white/10">
+                  <table className="w-full min-w-max text-left">
+                    <thead className="text-amber-400 uppercase text-xs tracking-wider">
+                      <tr>
+                        <th className="py-3 px-6 font-bold">Title</th>
+                        <th className="py-3 px-6 font-bold">Description</th>
+                        <th className="py-3 px-6 font-bold">Date</th>
+                        <th className="py-3 px-6 font-bold">Artist</th>
+                        <th className="py-3 px-6 font-bold">Credit</th>
+                      </tr>
+                    </thead>
+                    <tbody className="text-slate-300 text-sm">
+                      {parsedImageMetadata.map((meta) => (
+                        <tr
+                          key={meta.id}
+                          className="border-t border-slate-700 border-opacity-50 hover:bg-opacity-5 transition-colors duration-200 ease-in-out"
+                        >
+                          <td className="py-4 px-6">{meta.data.title}</td>
+                          <td className="py-4 px-6">{meta.data.description}</td>
+                          <td className="py-4 px-6">{meta.data.date}</td>
+                          <td className="py-4 px-6">{meta.data.artist}</td>
+                          <td className="py-4 px-6">{meta.data.credit}</td>
                         </tr>
-                      </thead>
-                      <tbody className="bg-black text-slate-400">
-                        {parsedImageMetadata.map((meta) => (
-                          <tr
-                            key={meta.id}
-                            className="hover:bg-slate-700 transition-colors duration-150 ease-in-out"
-                          >
-                            <td className="py-4 px-6 border-b border-slate-700">
-                              {meta.data.title}
-                            </td>
-                            <td className="py-4 px-6 border-b border-slate-700">
-                              {meta.data.description}
-                            </td>
-                            <td className="py-4 px-6 border-b border-slate-700">
-                              {meta.data.date}
-                            </td>
-                            <td className="py-4 px-6 border-b border-slate-700">
-                              {meta.data.artist}
-                            </td>
-                            <td className="py-4 px-6 border-b border-slate-700">
-                              {meta.data.credit}
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
-              </>
+              </div>
             )}
-            <div className="flex flex-col items-center justify-center">
+            <div className="flex flex-col items-center justify-center pt-12">
               <h1 className="text-white text-2xl font-montserrat">
                 End of Journey
               </h1>

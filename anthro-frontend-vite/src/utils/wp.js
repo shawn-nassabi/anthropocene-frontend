@@ -61,3 +61,15 @@ export async function getTeamMembers() {
   // Then get all posts in that category
   return getPostsInCategory(category.id);
 }
+
+/** Search posts by query string */
+export async function searchPosts(query) {
+  if (!query) return [];
+  const response = await fetch(
+    `${WP_BASE}/wp-json/wp/v2/posts?search=${encodeURIComponent(
+      query
+    )}&_embed&per_page=20`
+  );
+  if (!response.ok) throw new Error("Failed to search posts");
+  return response.json();
+}
